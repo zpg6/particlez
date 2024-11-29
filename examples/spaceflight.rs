@@ -1,10 +1,8 @@
 use crossterm::{cursor, terminal, ExecutableCommand};
-
+use rand::Rng;
 use std::io::{stdout, Write};
 use std::thread;
 use std::time::Duration;
-
-use rand::Rng;
 
 use particlez::{
     bounds::ParticleBoundsHandling, context::ParticleContext, movement::ParticleMovement,
@@ -12,6 +10,7 @@ use particlez::{
 };
 
 fn main() {
+    // Start with a reasonable fixed size for the terminal window animation
     let context = ParticleContext {
         width: 180,
         height: 34,
@@ -26,12 +25,20 @@ fn main() {
         particles.push(p);
     }
 
+    // Continuously update the particles with `ConstantVelocity` movement and render them to the terminal
     loop {
+        for particle in &mut particles {
+            ParticleMovement::ConstantVelocity(ParticleBoundsHandling::Wrap)
+                .update(particle, &context);
+        }
+
+        // Clear the terminal so everything can be re-rendered
         stdout()
             .execute(terminal::Clear(terminal::ClearType::All))
             .unwrap();
-        for particle in &particles {
 
+        // Render each particle with a character based on its velocity
+        for particle in &particles {
             let character = if particle.vx > 2 {
                 "*"
             } else if particle.vx > 1 {
@@ -47,17 +54,12 @@ fn main() {
                 .unwrap();
         }
 
-        // Put back the cursor at the bottom of the terminal
+        // Put back the cursor at the bottom of the terminal and flush the output
         stdout().execute(cursor::MoveTo(0, context.height)).unwrap();
-
         stdout().flush().unwrap();
 
-        for particle in &mut particles {
-            ParticleMovement::ConstantVelocity(ParticleBoundsHandling::Wrap)
-                .update(particle, &context);
-        }
-
-        // 60 frames per second
-        thread::sleep(Duration::from_millis(1000 / 60));
+        // Delay based on the desired frames per second
+        let fps = 60;
+        thread::sleep(Duration::from_millis(1000 / fps));
     }
 }
