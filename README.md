@@ -6,7 +6,7 @@ A toy particle system written in Rust with `crossterm`, maybe useful for TUI app
 
 #### Fall to Floor
 
-Uses `ParticleBoundsHandling::Stop` and displays particle based on its velocity.
+Uses `ParticleBoundsHandling::Stop` and displays particle based on its velocity. Particles hit the floor and appear to flatten.
 
 ```
 cargo run --example fall_to_floor
@@ -16,7 +16,7 @@ cargo run --example fall_to_floor
 
 #### Rainfall
 
-Uses `ParticleBoundsHandling::Wrap` and displays particle based on its velocity.
+Uses `ParticleBoundsHandling::Wrap` and displays particle based on its velocity. Raindrops moving faster look "thinner" and raindrops moving slower are more rounded.
 
 ```
 cargo run --example rainfall
@@ -26,7 +26,7 @@ cargo run --example rainfall
 
 #### Bugs Crawl
 
-Uses `ParticleBoundsHandling::Wrap` and varying velocities to simulate bugs crawling.
+Uses `ParticleBoundsHandling::Wrap` and `ParticleMovement::RandomSomeDirection` to simulate bugs crawling.
 
 ```
 cargo run --example bugs_crawl
@@ -36,7 +36,7 @@ cargo run --example bugs_crawl
 
 #### Spaceflight
 
-Uses `ParticleBoundsHandling::Wrap` and varying velocities to simulate passing objects near and far in space.
+Uses `ParticleBoundsHandling::Wrap` and varying `ParticleMovement::ConstantVelocity` to simulate smoothly passing objects in space, some near and some far in the distance.
 
 ```
 cargo run --example spaceflight
